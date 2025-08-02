@@ -4,7 +4,7 @@
   License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
  */
 
-:root {
+[data-theme="light"] {
 	--accent: #0D131A;
 	--bg: rgba(251, 254, 251, 1);
 	--bg-secondary: #f5f6fa;
@@ -18,7 +18,22 @@
 	--gray-gradient: rgba(var(--gray-light), 50%), #fff;
 	--box-shadow:
 		0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%);
+
+	.icon-github-sun,
+	.icon-moon {
+		display: block;
+	}
+
+	.icon-github-dark,
+	.icon-sun {
+		display: none;
+	}
+
+	.avatar {
+		filter: brightness(1);
+	}
 }
+
 body {
 	transition: background-color 0.3s ease;
 }
@@ -34,6 +49,20 @@ body {
 	--gray-dark: 220, 220, 230;
 	--gray-gradient: rgba(var(--gray-light), 60%), #23232a;
 	--box-shadow: 0 2px 6px rgba(var(--gray), 10%), 0 8px 24px rgba(var(--gray), 15%), 0 16px 32px rgba(var(--gray), 15%);
+
+	.icon-github-sun,
+	.icon-moon {
+		display: none;
+	}
+
+	.icon-github-dark,
+	.icon-sun {
+		display: block;
+	}
+
+	.avatar {
+		filter: brightness(0.85);
+	}
 }
 
 ::-webkit-scrollbar {

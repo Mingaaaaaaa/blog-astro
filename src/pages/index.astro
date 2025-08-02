@@ -10,7 +10,7 @@ const posts = (await getCollection('blog'))
   .slice(0, 3);
 ---
 
-<html lang='zh-CN'>
+<html lang='zh-CN' data-theme='light'>
   <head>
     <BaseHead title="Alplune's Blog" description="Alplune's Blog" />
     <style>
@@ -30,6 +30,7 @@ const posts = (await getCollection('blog'))
           flex-shrink: 0;
           background: #fff;
           border: 1px solid var(--border);
+          transition: filter 0.2s;
         }
         .intro-info {
           flex: 1;
