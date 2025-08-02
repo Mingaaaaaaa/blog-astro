@@ -118,11 +118,55 @@
     return observer;
   }
 
-  // 页面加载完成后初始化
-  document.addEventListener('DOMContentLoaded', function () {
-    console.log('DOMContentLoaded');
+  // 全局变量来跟踪是否已初始化
+  let isInitialized = false;
+  let currentObserver: MutationObserver | null = null;
+  let currentGiscusObserver: MutationObserver | null = null;
+
+  // 检查当前页面是否需要 giscus
+  function shouldInitializeGiscus() {
+    // 检查是否存在 giscus-container 元素
+    const container = document.getElementById('giscus-container');
+    if (!container) {
+      return false;
+    }
+    return true;
+  }
+
+  // 清理函数
+  function cleanupGiscus() {
+    if (isInitialized) {
+      if (currentObserver) {
+        currentObserver.disconnect();
+        currentObserver = null;
+      }
+      if (currentGiscusObserver) {
+        currentGiscusObserver.disconnect();
+        currentGiscusObserver = null;
+      }
+      isInitialized = false;
+    }
+  }
+
+  // 初始化函数
+  function initializeGiscus() {
+    // 检查是否需要初始化 giscus
+    if (!shouldInitializeGiscus()) {
+      return;
+    }
+    if (isInitialized) {
+      if (currentObserver) {
+        currentObserver.disconnect();
+        currentObserver = null;
+      }
+      if (currentGiscusObserver) {
+        currentGiscusObserver.disconnect();
+        currentGiscusObserver = null;
+      }
+    }
     initGiscus();
     const observer = setupThemeObserver();
+    currentObserver = observer;
 
     // 监听 giscus 的重新创建事件
     const giscusObserver = new MutationObserver((mutations) => {
@@ -154,14 +198,30 @@
       });
     }
 
-    // 清理函数
-    window.addEventListener('beforeunload', () => {
-      if (observer) {
-        observer.disconnect();
-      }
-      if (giscusObserver) {
-        giscusObserver.disconnect();
-      }
-    });
+    currentGiscusObserver = giscusObserver;
+    isInitialized = true;
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    if (shouldInitializeGiscus()) {
+      initializeGiscus();
+    } else {
+      cleanupGiscus();
+    }
+  });
+
+  document.addEventListener('astro:page-load', function () {
+    if (shouldInitializeGiscus()) {
+      initializeGiscus();
+    } else {
+      cleanupGiscus();
+    }
+  });
+
+  document.addEventListener('astro:after-swap', function () {
+    if (shouldInitializeGiscus()) {
+      initializeGiscus();
+    } else {
+      cleanupGiscus();
+    }
   });
 </script>
