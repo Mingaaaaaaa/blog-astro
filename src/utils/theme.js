@@ -34,25 +34,21 @@
             setTheme(localStorage.getItem('theme'));
             requestAnimationFrame(() => {
                 changeIcons(localStorage.getItem('theme'));
-            }
-            );
+            });
         } else {
             setTheme('light');
         }
     }
     initNewPageTheme();
     document.addEventListener("astro:after-swap", initNewPageTheme);
-
     window.toggleTheme = function () {
         console.log('Toggling theme');
         if (html.getAttribute('data-theme') === 'dark') {
             setTheme('light');
-
             changeIcons('light');
         } else {
             setTheme('dark');
             changeIcons('dark');
         }
     }
-    console.log('Theme script loaded');
 })()

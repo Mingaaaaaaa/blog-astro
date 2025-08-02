@@ -1,0 +1,167 @@
+---
+// GiscusComments.astro
+---
+
+<div id='giscus-container' class='mt-8'></div>
+
+<script>
+  function getCurrentTheme() {
+    if (typeof window === 'undefined') {
+      return 'light';
+    }
+    const savedTheme = window.localStorage.getItem('theme');
+    if (savedTheme) {
+      console.log('savedTheme', savedTheme);
+      return savedTheme;
+    }
+
+    return 'light';
+  }
+
+  function createGiscusScript(theme: string) {
+    const giscusTheme = theme === 'dark' ? 'catppuccin_mocha' : 'light';
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', 'Mingaaaaaaa/blog-astro');
+    script.setAttribute('data-repo-id', 'R_kgDOPXB28A');
+    script.setAttribute('data-category', 'Announcements');
+    script.setAttribute('data-category-id', 'DIC_kwDOPXB28M4Cts2D');
+    script.setAttribute('data-mapping', 'title');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'top');
+    script.setAttribute('data-theme', giscusTheme);
+    script.setAttribute('data-lang', 'zh-CN');
+    script.setAttribute('data-loading', 'lazy');
+    script.setAttribute('crossorigin', 'anonymous');
+    script.async = true;
+
+    return script;
+  }
+
+  // 初始化 giscus
+  function initGiscus() {
+    const container = document.getElementById('giscus-container');
+    if (!container) return;
+    container.innerHTML = '';
+    const theme = getCurrentTheme();
+    const htmlTheme = document.documentElement.getAttribute('data-theme');
+    const savedTheme = window.localStorage.getItem('theme');
+
+    console.log('Initializing giscus with theme:', {
+      theme,
+      htmlTheme,
+      savedTheme,
+      hasDataTheme: !!htmlTheme
+    });
+
+    const script = createGiscusScript(theme);
+    container.appendChild(script);
+  }
+
+  // 监听主题变化
+  function setupThemeObserver() {
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'data-theme'
+        ) {
+          const theme = getCurrentTheme();
+          console.log(`Theme changed to: ${theme}`);
+
+          // 使用 postMessage 更新现有 giscus 主题
+          const giscusFrame = (document.querySelector('iframe.giscus-frame') ||
+            document.querySelector(
+              'iframe[src*="giscus.app"]'
+            )) as HTMLIFrameElement;
+
+          if (giscusFrame && giscusFrame.contentWindow) {
+            const giscusTheme = theme === 'dark' ? 'catppuccin_mocha' : 'light';
+            if (giscusFrame.contentWindow) {
+              try {
+                giscusFrame.contentWindow.postMessage(
+                  {
+                    giscus: {
+                      setConfig: {
+                        theme: giscusTheme
+                      }
+                    }
+                  },
+                  'https://giscus.app'
+                );
+                console.log(`Giscus theme updated to: ${giscusTheme}`);
+              } catch (error) {
+                console.warn(
+                  'Failed to update giscus theme via postMessage:',
+                  error
+                );
+                // 不重新创建 giscus，保持用户登录状态
+                console.log(
+                  'Giscus will maintain current state to preserve user session'
+                );
+              }
+            }
+          } else {
+          }
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-theme']
+    });
+
+    return observer;
+  }
+
+  // 页面加载完成后初始化
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('DOMContentLoaded');
+    initGiscus();
+    const observer = setupThemeObserver();
+
+    // 监听 giscus 的重新创建事件
+    const giscusObserver = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.type === 'childList') {
+          mutation.addedNodes.forEach((node) => {
+            if (node.nodeType === Node.ELEMENT_NODE) {
+              const element = node as Element;
+              if (
+                element.tagName === 'IFRAME' &&
+                element.getAttribute('src')?.includes('giscus.app')
+              ) {
+                setTimeout(() => {
+                  const theme = getCurrentTheme();
+                }, 500);
+              }
+            }
+          });
+        }
+      });
+    });
+
+    // 监听 giscus 容器的变化
+    const container = document.getElementById('giscus-container');
+    if (container) {
+      giscusObserver.observe(container, {
+        childList: true,
+        subtree: true
+      });
+    }
+
+    // 清理函数
+    window.addEventListener('beforeunload', () => {
+      if (observer) {
+        observer.disconnect();
+      }
+      if (giscusObserver) {
+        giscusObserver.disconnect();
+      }
+    });
+  });
+</script>
