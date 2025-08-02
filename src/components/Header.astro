@@ -1,12 +1,11 @@
 ---
-import Divider from './Divider.astro';
 import HeaderLink from './HeaderLink.astro';
 ---
 
 <header>
   <style>
     header {
-      margin: 1.2em auto 0 auto;
+      margin: 2em auto 0 auto;
       padding: 0 1em;
       border-radius: 12px;
       max-width: 720px;
@@ -70,6 +69,7 @@ import HeaderLink from './HeaderLink.astro';
       header {
         max-width: 98vw;
         padding: 0 0.5em;
+        margin: 1.2em auto 0 auto;
         nav {
           .logo {
             display: none;
@@ -85,6 +85,14 @@ import HeaderLink from './HeaderLink.astro';
           }
         }
       }
+    }
+    .divider {
+      height: 1px;
+      width: 750px;
+      max-width: calc(100% - 2em);
+      background: var(--accent);
+      margin: 0 auto;
+      margin-top: 0.5em;
     }
   </style>
   <nav>
@@ -119,4 +127,4 @@ import HeaderLink from './HeaderLink.astro';
     </div>
   </nav>
 </header>
-<Divider />
+<div class='divider'></div>

@@ -4,45 +4,51 @@ import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
 ---
 
-<BaseHead title='关于 Alplune' description='关于 Alplune' />
-<Header />
-<style>
-  .sunflower {
-    width: 70%;
-    object-fit: contain;
-  }
-  .about-title {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: var(--text);
-    margin-bottom: 0.1em;
-  }
-  .about-desc {
-    color: var(--text-secondary);
-    font-size: 0.98em;
-    margin-bottom: 0.1em;
-    line-height: 1.5;
-  }
-</style>
-<main>
-  <section class='about-wrap'>
-    <div class='about-content'>
-      <h5 class='about-title'>关于我</h5>
-      <p class='about-desc'>
-        大学开始接触前端开发，立志成为全栈工程师。
-        <a href='https://sast.fun/' target='_blank'>南邮校科协</a> 和 <a
-          href='https://qingyou.studio/'
-          target='_blank'>青柚工作室</a
-        >
-        ，这两个社团丰富了我的大学生活，是我技术学习的引路人。
-      </p>
-      <p class='about-desc'>
-        曾经在百度、小红书和网易实习。运气很好，技术和生活都有所收获。
-        现状是在北漂，希望自己能保持对生活的热情。
-      </p>
-      <p class='about-desc'>乡野阅读生命，市井品味人生。</p>
-      <img class='sunflower' src='/sunflower.webp' alt='sunflower' />
-    </div>
-  </section>
-</main>
-<Footer />
+<html lang='zh-CN' data-theme='light'>
+  <head>
+    <BaseHead title='关于 Alplune' description='关于 Alplune' />
+  </head>
+  <body>
+    <Header />
+    <style>
+      .sunflower {
+        width: 70%;
+        object-fit: contain;
+      }
+      .about-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: var(--text);
+        margin-bottom: 0.1em;
+      }
+      .about-desc {
+        color: var(--text-secondary);
+        font-size: 0.98em;
+        margin-bottom: 0.1em;
+        line-height: 1.5;
+      }
+    </style>
+    <main>
+      <section class='about-wrap'>
+        <div class='about-content'>
+          <h5 class='about-title'>关于我</h5>
+          <p class='about-desc'>
+            大学开始接触前端开发，立志成为全栈工程师。
+            <a href='https://sast.fun/' target='_blank'>南邮校科协</a> 和 <a
+              href='https://qingyou.studio/'
+              target='_blank'>青柚工作室</a
+            >
+            ，这两个社团丰富了我的大学生活，是我技术学习的引路人。
+          </p>
+          <p class='about-desc'>
+            曾经在百度、小红书和网易实习。运气很好，技术和生活都有所收获。
+            现状是在北漂，希望自己能保持对生活的热情。
+          </p>
+          <p class='about-desc'>乡野阅读生命，市井品味人生。</p>
+          <img class='sunflower' src='/sunflower.webp' alt='sunflower' />
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body>
+</html>

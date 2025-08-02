@@ -11,76 +11,79 @@ const posts = (await getCollection('blog')).sort(
 );
 ---
 
-<head>
-  <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-  <style>
-    .post-desc {
-      color: var(--text-secondary);
-      margin-bottom: 3em;
-    }
-    ul {
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      gap: 3rem;
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-    ul li {
-      width: calc(100% - 1rem);
-    }
-    ul li * {
-      text-decoration: none;
-      transition: 0.2s ease;
-    }
-
-    ul li a {
-      display: block;
-    }
-    .title {
-      margin: 0;
-      color: rgb(var(--text));
-      line-height: 1;
-    }
-    .date {
-      margin: 0;
-      color: #666;
-    }
-    .desc {
-      color: var(--text-secondary);
-      font-size: 0.98em;
-      margin-bottom: 0.1em;
-      line-height: 1.5;
-    }
-    @media (max-width: 720px) {
+<html lang='zh-CN' data-theme='light'>
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      .post-desc {
+        color: var(--text-secondary);
+        margin-bottom: 3em;
+      }
       ul {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
         gap: 3rem;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
       }
       ul li {
-        width: 100%;
+        width: calc(100% - 1rem);
       }
-    }
-  </style>
-</head>
-<Header />
-<main>
-  <p class='post-desc'>也许是一些学习笔记，生活感受......</p>
-  <ul>
-    {
-      posts.map((post) => (
-        <li>
-          <a href={`/blog/${post.id}/`}>
-            <h4 class='title'>{post.data.title}</h4>
-            <p class='date'>
-              <FormattedDate date={post.data.pubDate} />
-            </p>
-            <div class='desc'>{post.data.description}</div>
-          </a>
-        </li>
-      ))
-    }
-  </ul>
-</main>
-<Footer />
+      ul li * {
+        text-decoration: none;
+        transition: 0.2s ease;
+      }
 
+      ul li a {
+        display: block;
+      }
+      .title {
+        margin: 0;
+        color: rgb(var(--text));
+        line-height: 1;
+      }
+      .date {
+        margin: 0;
+        color: #666;
+      }
+      .desc {
+        color: var(--text-secondary);
+        font-size: 0.98em;
+        margin-bottom: 0.1em;
+        line-height: 1.5;
+      }
+      @media (max-width: 720px) {
+        ul {
+          gap: 3rem;
+        }
+        ul li {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <p class='post-desc'>也许是一些学习笔记，生活感受......</p>
+      <ul>
+        {
+          posts.map((post) => (
+            <li>
+              <a href={`/blog/${post.id}/`}>
+                <h4 class='title'>{post.data.title}</h4>
+                <p class='date'>
+                  <FormattedDate date={post.data.pubDate} />
+                </p>
+                <div class='desc'>{post.data.description}</div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </main>
+    <Footer />
+  </body>
+</html>
