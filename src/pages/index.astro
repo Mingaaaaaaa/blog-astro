@@ -2,48 +2,139 @@
 import BaseHead from '../components/BaseHead.astro';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+
+const posts = (await getCollection('blog'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 3);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-	</head>
-	<body>
-		<Header />
-		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
-		</main>
-		<Footer />
-	</body>
+<html lang='zh-CN'>
+  <head>
+    <BaseHead title="Alplune's Blog" description="Alplune's Blog" />
+    <style>
+      .intro-wrap {
+        max-width: 420px;
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        gap: 1.2em;
+        justify-content: space-between;
+        align-items: center;
+        .avatar {
+          width: 90px;
+          height: 90px;
+          border-radius: 50%;
+          object-fit: cover;
+          flex-shrink: 0;
+          background: #fff;
+          border: 1px solid var(--border);
+        }
+        .intro-info {
+          flex: 1;
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 0.2em;
+        }
+        .intro-info .nickname {
+          font-size: 1.18em;
+          font-weight: bold;
+          color: var(--text-secondary);
+          margin-bottom: 0.1em;
+          line-height: 1.2;
+        }
+        .intro-info .desc {
+          color: var(--text-secondary);
+          font-size: 0.98em;
+          margin-bottom: 0.1em;
+          line-height: 1.5;
+        }
+      }
+      .blog-list {
+        max-width: 900px;
+        margin: 2em auto;
+        padding: 0 0.5em;
+        ul {
+          display: flex;
+          flex-direction: column;
+          gap: 1em;
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+        li {
+          border-radius: 12px;
+          padding: 1em 0em;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+        .title {
+          font-size: 1.2em;
+          font-weight: bold;
+          margin: 0 0 0.5em 0;
+          color: var(--text);
+        }
+        .date {
+          color: #666;
+          font-size: 0.92em;
+          margin-bottom: 0.5em;
+        }
+        .desc {
+          overflow: hidden;
+          max-height: 3.5em;
+          font-size: 1em;
+          text-align: justify;
+          color: var(--text-secondary);
+          text-overflow: ellipsis;
+        }
+        .more-btn {
+          display: block;
+          margin: 1em auto 0 auto;
+          padding: 0.5em 0em;
+          color: var(--text);
+          font-size: 1.1em;
+          cursor: pointer;
+          text-decoration: underline;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section class='intro-wrap'>
+        <img class='avatar' src='/alplune.svg' alt='Alplune 头像' />
+        <div class='intro-info'>
+          <div class='nickname'>Alplune</div>
+          <div class='desc'>AI 赋能的前端工程师</div>
+        </div>
+      </section>
+      <section class='blog-list'>
+        <ul>
+          {
+            posts.map((post) => (
+              <li>
+                <a
+                  href={`/blog/${post.id}/`}
+                  style='text-decoration:none;color:inherit;'
+                >
+                  <div class='title'>{post.data.title}</div>
+                  <div class='date'>
+                    <FormattedDate date={post.data.pubDate} />
+                  </div>
+                  <div class='desc'>{post.data.description}</div>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a class='more-btn' href='/blog'>查看更多</a>
+      </section>
+    </main>
+    <Footer />
+  </body>
 </html>
